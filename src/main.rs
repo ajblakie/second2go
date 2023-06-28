@@ -1,16 +1,10 @@
-use actix_web::{web, App, HttpRequest, HttpServer, Responder};
-async fn greet(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("name").unwrap_or("World");
-    format!("Hello {}!", &name)
-}
+use second2go::run;
+use std::net::TcpListener;
+
 #[tokio::main]
-async fn main() -> Result<(), std::io::Error> {
-    HttpServer::new(|| {
-        App::new()
-            .route("/", web::get().to(greet))
-            .route("/{name}", web::get().to(greet))
-    })
-    .bind("127.0.0.1:8000")?
-    .run()
-    .await
+async fn main() -> std::io::Result<()> // Bubble up the io::Error if we failed to bind the address
+{
+    // Bubble up the io::Error if we failed to bind the address
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind to random port");
+    run(listener)?.await
 }
