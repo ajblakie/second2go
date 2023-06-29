@@ -1,4 +1,4 @@
-use second2go::run;
+use second2go::startup::run;
 use std::net::TcpListener;
 
 #[tokio::main]
